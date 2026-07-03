@@ -15,7 +15,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-[#F5F6F8]">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-white print:hidden">
         {/* Brand accent stripe */}
         <div className="h-1 w-full" style={{ background: `linear-gradient(to right, #1A4D10 70%, #D4AA00 100%)` }} />
         {/* Top bar: brand + user controls */}

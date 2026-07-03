@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState, EntityTag, StatusBadge } from "@/components/ui";
 import { formatLKR, formatDate } from "@/lib/format";
+import Link from "next/link";
 
 export default async function InvoicesPage() {
   const supabase = await createClient();
@@ -48,8 +49,10 @@ export default async function InvoicesPage() {
                   0
                 );
                 return (
-                  <tr key={inv.id} className="border-b border-slate-100 last:border-0">
-                    <td className="px-4 py-3 font-mono tabular-nums text-slate-900">{inv.invoice_no}</td>
+                  <tr key={inv.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                    <td className="px-4 py-3 font-mono tabular-nums text-slate-900">
+                      <Link href={`/invoices/${inv.id}`} className="text-blue-700 hover:underline">{inv.invoice_no}</Link>
+                    </td>
                     <td className="px-4 py-3"><EntityTag entityId={inv.entity_id} /></td>
                     {/* @ts-expect-error -- joined relation shape */}
                     <td className="px-4 py-3 text-slate-700">{inv.customers?.name ?? "—"}</td>
