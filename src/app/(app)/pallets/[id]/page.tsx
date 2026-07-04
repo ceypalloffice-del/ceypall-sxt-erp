@@ -287,10 +287,18 @@ export default async function PalletSpecPage({
               </Field>
 
               <Field label="Treatment type">
-                <input name="treatment_type" defaultValue={spec.treatment_type ?? ""} placeholder="e.g. Chemical Vacuum Pressure Impregnation" className={inputCls} />
+                <select name="treatment_type" defaultValue={spec.treatment_type ?? "None"} className={inputCls}>
+                  {treatmentOptions(spec.treatment_type).map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
               </Field>
               <Field label="Additional treatment">
-                <input name="additional_treatment" defaultValue={spec.additional_treatment ?? ""} placeholder="e.g. Kiln drying" className={inputCls} />
+                <select name="additional_treatment" defaultValue={spec.additional_treatment ?? "None"} className={inputCls}>
+                  {treatmentOptions(spec.additional_treatment).map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
               </Field>
 
               <Field label="Wood species">
@@ -373,6 +381,15 @@ export default async function PalletSpecPage({
       )}
     </div>
   );
+}
+
+const TREATMENT_OPTIONS = ["Heat Treated - ISPM 15", "CPI Treatment", "Kiln Drying", "None"];
+
+/** The fixed options, keeping any legacy free-text value selectable. */
+function treatmentOptions(current: string | null) {
+  return current && !TREATMENT_OPTIONS.includes(current)
+    ? [current, ...TREATMENT_OPTIONS]
+    : TREATMENT_OPTIONS;
 }
 
 const inputCls =
