@@ -13,8 +13,15 @@ import {
   deletePalletSpecItem,
 } from "@/app/actions/pallet-specs";
 
-export default async function PalletSpecPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function PalletSpecPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ saved?: string }>;
+}) {
   const { id } = await params;
+  const { saved } = await searchParams;
   const supabase = await createClient();
   const profile = await getProfile();
   const canEdit = canKeepBooks(profile);
@@ -54,6 +61,28 @@ export default async function PalletSpecPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="space-y-8">
+      {saved && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-green-200 bg-green-50 px-4 py-3">
+          <p className="text-sm font-medium text-green-800">
+            ✓ Pallet spec saved. Do you want to add another one?
+          </p>
+          <div className="flex gap-2">
+            <Link
+              href="/pallets?new=1#new-spec"
+              className="rounded-md bg-green-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+            >
+              Yes, add another
+            </Link>
+            <Link
+              href="/pallets"
+              className="rounded-md border border-green-300 bg-white px-3 py-1.5 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+            >
+              No, go to pallets list
+            </Link>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-xl font-semibold text-slate-900">{spec.name}</h1>

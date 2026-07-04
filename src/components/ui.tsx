@@ -3,12 +3,14 @@ import { type EntityKey, ENTITIES } from "@/lib/entities";
 export function Card({
   children,
   className = "",
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
   return (
-    <div className={`rounded-xl border border-slate-200 bg-white p-5 ${className}`}>
+    <div id={id} className={`rounded-xl border border-slate-200 bg-white p-5 ${className}`}>
       {children}
     </div>
   );

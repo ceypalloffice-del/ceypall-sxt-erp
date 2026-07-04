@@ -58,6 +58,8 @@ export async function updatePalletSpec(formData: FormData) {
     .eq("id", id);
 
   revalidatePath(`/pallets/${id}`);
+  revalidatePath("/pallets");
+  redirect(`/pallets/${id}?saved=1`);
 }
 
 export async function deletePalletSpec(formData: FormData) {

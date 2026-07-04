@@ -6,7 +6,12 @@ import { formatLKR } from "@/lib/format";
 import { computeCosting } from "@/lib/costing";
 import { createPalletSpec } from "@/app/actions/pallet-specs";
 
-export default async function PalletsPage() {
+export default async function PalletsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ new?: string }>;
+}) {
+  const { new: focusNew } = await searchParams;
   const supabase = await createClient();
   const profile = await getProfile();
   const canEdit = canKeepBooks(profile);
@@ -90,13 +95,14 @@ export default async function PalletsPage() {
       )}
 
       {canEdit && (
-        <Card>
+        <Card id="new-spec" className="scroll-mt-24">
           <h2 className="text-sm font-semibold text-slate-700">New pallet/crate spec</h2>
           <form action={createPalletSpec} className="mt-3 flex gap-3">
             <input
               name="name"
               placeholder="e.g. 48 x 48 CPI Pallet"
               required
+              autoFocus={focusNew === "1"}
               className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
             />
             <button
