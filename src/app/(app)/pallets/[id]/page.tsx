@@ -212,46 +212,6 @@ export default async function PalletSpecPage({
           )}
         </Card>
 
-        {canEdit && (
-          <Card className="mt-4">
-            <h3 className="text-sm font-semibold text-slate-700">Add line item</h3>
-            <form action={addPalletSpecItem} className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-5">
-              <input type="hidden" name="spec_id" value={id} />
-              <select
-                name="cost_item_id"
-                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-2"
-              >
-                <option value="">— Custom item —</option>
-                {(costItems ?? []).map((ci) => (
-                  <option key={ci.id} value={ci.id}>
-                    {ci.name} ({formatLKR(ci.unit_price)})
-                  </option>
-                ))}
-              </select>
-              <input
-                name="item_name"
-                placeholder="Custom item name"
-                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              />
-              <input
-                name="qty"
-                type="number"
-                step="0.01"
-                placeholder="Qty"
-                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
-                Add
-              </button>
-            </form>
-            <p className="mt-2 text-xs text-slate-400">
-              Pick a material to use its current price, or leave it as a custom item and set unit price after adding.
-            </p>
-          </Card>
-        )}
       </section>
 
       {canEdit && (
@@ -376,6 +336,49 @@ export default async function PalletSpecPage({
                 Delete this spec
               </button>
             </form>
+          </Card>
+        </section>
+      )}
+
+      {canEdit && (
+        <section>
+          <h2 className="text-sm font-semibold text-slate-700">Add line item</h2>
+          <Card className="mt-3">
+            <form action={addPalletSpecItem} className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+              <input type="hidden" name="spec_id" value={id} />
+              <select
+                name="cost_item_id"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-2"
+              >
+                <option value="">— Custom item —</option>
+                {(costItems ?? []).map((ci) => (
+                  <option key={ci.id} value={ci.id}>
+                    {ci.name} ({formatLKR(ci.unit_price)})
+                  </option>
+                ))}
+              </select>
+              <input
+                name="item_name"
+                placeholder="Custom item name"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+              />
+              <input
+                name="qty"
+                type="number"
+                step="0.01"
+                placeholder="Qty"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+              />
+              <button
+                type="submit"
+                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+              >
+                Add
+              </button>
+            </form>
+            <p className="mt-2 text-xs text-slate-400">
+              Pick a material to use its current price, or leave it as a custom item and set unit price after adding.
+            </p>
           </Card>
         </section>
       )}
