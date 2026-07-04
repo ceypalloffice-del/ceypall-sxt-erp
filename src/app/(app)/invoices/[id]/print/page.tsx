@@ -53,7 +53,12 @@ export default async function InvoicePrintPage({ params }: { params: Promise<{ i
     customers?: { name?: string; phone?: string; email?: string };
   }).customers;
 
-  const invExtra = inv as Record<string, unknown>;
+  const invExtra = inv as {
+    vat_rate: number | null;
+    delivery_no: string | null;
+    po_ref: string | null;
+    purchaser_tin: string | null;
+  };
 
   return (
     <div className="min-h-screen bg-white">

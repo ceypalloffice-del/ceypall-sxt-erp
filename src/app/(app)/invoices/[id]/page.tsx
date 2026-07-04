@@ -29,8 +29,15 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
     products: { name: string } | null;
   }>;
 
+  const invExtra = inv as {
+    vat_rate: number | null;
+    delivery_no: string | null;
+    po_ref: string | null;
+    purchaser_tin: string | null;
+  };
+
   const subtotal = lines.reduce((s, l) => s + Number(l.line_total), 0);
-  const vatRate = Number((inv as Record<string, unknown>).vat_rate ?? 18);
+  const vatRate = Number(invExtra.vat_rate ?? 18);
   const vatAmount = Math.round(subtotal * vatRate / 100);
   const total = subtotal + vatAmount;
 
@@ -56,7 +63,6 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
         <Card>
           <p className="text-xs text-slate-500">Entity</p>
           <div className="mt-1">
-            {/* @ts-expect-error -- entityId type */}
             <EntityTag entityId={inv.entity_id} />
           </div>
         </Card>
@@ -79,31 +85,30 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm md:grid-cols-4">
           <div>
             <p className="text-xs text-slate-500">Customer</p>
-            {/* @ts-expect-error -- joined relation */}
             <p className="mt-0.5 font-medium text-slate-900">{inv.customers?.name ?? "—"}</p>
           </div>
-          {(inv as Record<string, unknown>).delivery_no && (
+          {invExtra.delivery_no && (
             <div>
               <p className="text-xs text-slate-500">Delivery Note</p>
-              <p className="mt-0.5 font-mono tabular-nums text-slate-900">{String((inv as Record<string, unknown>).delivery_no)}</p>
+              <p className="mt-0.5 font-mono tabular-nums text-slate-900">{invExtra.delivery_no}</p>
             </div>
           )}
-          {(inv as Record<string, unknown>).po_ref && (
+          {invExtra.po_ref && (
             <div>
               <p className="text-xs text-slate-500">PO Reference</p>
-              <p className="mt-0.5 font-mono tabular-nums text-slate-900">{String((inv as Record<string, unknown>).po_ref)}</p>
+              <p className="mt-0.5 font-mono tabular-nums text-slate-900">{invExtra.po_ref}</p>
             </div>
           )}
-          {(inv as Record<string, unknown>).purchaser_tin && (
+          {invExtra.purchaser_tin && (
             <div>
               <p className="text-xs text-slate-500">Purchaser TIN</p>
-              <p className="mt-0.5 font-mono tabular-nums text-slate-900">{String((inv as Record<string, unknown>).purchaser_tin)}</p>
+              <p className="mt-0.5 font-mono tabular-nums text-slate-900">{invExtra.purchaser_tin}</p>
             </div>
           )}
-          {(inv as Record<string, unknown>).vat_rate && (
+          {invExtra.vat_rate && (
             <div>
               <p className="text-xs text-slate-500">VAT Rate</p>
-              <p className="mt-0.5 font-medium text-slate-900">{String((inv as Record<string, unknown>).vat_rate)}%</p>
+              <p className="mt-0.5 font-medium text-slate-900">{invExtra.vat_rate}%</p>
             </div>
           )}
         </div>

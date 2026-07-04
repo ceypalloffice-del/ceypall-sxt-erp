@@ -42,7 +42,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         {/* Nav bar: horizontally scrollable */}
         <div className="border-t border-slate-100 overflow-x-auto">
           <div className="mx-auto max-w-screen-2xl px-6">
-            <Nav activeEntity={activeEntity} />
+            <Nav activeEntity={activeEntity} role={profile?.role ?? "viewer"} />
           </div>
         </div>
       </header>

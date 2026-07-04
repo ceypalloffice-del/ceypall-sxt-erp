@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { EntityKey } from "@/lib/entities";
+import { canAccess, type Role } from "@/lib/access";
 
 const LINKS = [
   { href: "/", label: "Dashboard" },
@@ -23,12 +24,16 @@ const LINKS = [
   { href: "/inventory", label: "Inventory" },
   { href: "/warehouses", label: "Warehouses" },
   { href: "/chemicals", label: "Chemicals" },
+  { href: "/admin/users", label: "Users" },
 ];
 
-export function Nav({ activeEntity }: { activeEntity: EntityKey }) {
+export function Nav({ activeEntity, role }: { activeEntity: EntityKey; role: Role }) {
   const pathname = usePathname();
   const links = LINKS.filter(
-    (link) => (!link.cplOnly || activeEntity !== "SXT") && (!link.sxtOnly || activeEntity !== "CPL")
+    (link) =>
+      (!link.cplOnly || activeEntity !== "SXT") &&
+      (!link.sxtOnly || activeEntity !== "CPL") &&
+      canAccess(role, link.href)
   );
 
   return (
