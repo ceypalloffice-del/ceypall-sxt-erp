@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getProfile, isDirector } from "@/lib/session";
 import { Card, EmptyState } from "@/components/ui";
-import { updateUserAccess } from "@/app/actions/users";
+import { createUserAccount, updateUserAccess } from "@/app/actions/users";
 import { ROLES } from "@/lib/access";
 
 const ROLE_HINTS: Record<string, string> = {
@@ -12,7 +12,12 @@ const ROLE_HINTS: Record<string, string> = {
   viewer: "Read-only",
 };
 
-export default async function UsersAdminPage() {
+export default async function UsersAdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; created?: string }>;
+}) {
+  const { error, created } = await searchParams;
   const profile = await getProfile();
   if (!isDirector(profile)) redirect("/");
 
@@ -28,10 +33,77 @@ export default async function UsersAdminPage() {
       <div>
         <h1 className="text-xl font-semibold text-slate-900">Users</h1>
         <p className="mt-1 text-sm text-slate-500">
-          Assign each person a role and, optionally, lock them to one entity.
-          New staff sign up on the signup page and appear here as viewers.
+          Create accounts for your staff and assign each person a role — and, optionally,
+          lock them to one entity.
         </p>
       </div>
+
+      {created && (
+        <p className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          Account for <span className="font-medium">{created}</span> created. Give them their
+          email and temporary password so they can sign in.
+        </p>
+      )}
+      {error && (
+        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
+      )}
+
+      <Card>
+        <h2 className="text-sm font-semibold text-slate-700">Add user</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Set a temporary password and share it with the staff member privately.
+        </p>
+        <form action={createUserAccount} className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <input
+            name="full_name"
+            placeholder="Full name"
+            required
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            required
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          />
+          <input
+            name="password"
+            type="text"
+            placeholder="Temporary password (min 8)"
+            required
+            minLength={8}
+            autoComplete="off"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          />
+          <select
+            name="role"
+            defaultValue="viewer"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          >
+            {ROLES.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+          <div className="flex gap-2">
+            <select
+              name="entity_scope"
+              defaultValue=""
+              className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            >
+              <option value="">All entities</option>
+              <option value="SXT">St. Xavier only</option>
+              <option value="CPL">CeyPall only</option>
+            </select>
+            <button
+              type="submit"
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            >
+              Create
+            </button>
+          </div>
+        </form>
+      </Card>
 
       {rows.length === 0 ? (
         <EmptyState title="No users yet" hint="Ask staff to sign up; they will appear here." />

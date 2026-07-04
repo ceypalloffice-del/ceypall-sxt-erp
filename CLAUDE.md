@@ -11,7 +11,7 @@ Internal multi-entity ERP for a Sri Lankan group: **St. Xavier Timber** (`SXT` �
 - The schema is `supabase/01_schema.sql`. **Match it exactly — never create, rename, or drop tables.**
 - Every transactional row carries `entity_id` (`'SXT'` | `'CPL'`). "Consolidated" is a query with no entity filter.
 - Balances and margins are **Postgres views** — `customer_balances`, `supplier_payables`, `job_pnl`, `ar_ageing`. Read from them; never store or recompute a balance/margin in app code.
-- RLS is enabled. Always query with the **user's** session (anon key + cookies). Never use the service-role key in app code.
+- RLS is enabled. Always query with the **user's** session (anon key + cookies). Never use the service-role key in app code — **sole exception:** `src/lib/supabase/admin.ts` (`SUPABASE_SERVICE_ROLE_KEY`) exists for auth admin ops (director-gated user creation in `actions/users.ts`); never widen it to business data.
 - `job_pnl` exposes margin → only query it when the user's role is `director`.
 - Importable tables carry `external_ref` for idempotent QuickBooks import. Don't repurpose it.
 
