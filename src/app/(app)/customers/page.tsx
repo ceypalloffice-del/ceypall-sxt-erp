@@ -1,11 +1,18 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getProfile, getActiveEntity } from "@/lib/session";
+import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState, EntityTag } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 
-export default async function CustomersPage() {
+export default async function CustomersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
   const supabase = await createClient();
   const profile = await getProfile();
+  const canEdit = canKeepBooks(profile);
   const entity = await getActiveEntity(profile);
 
   let customers = supabase
@@ -29,15 +36,29 @@ export default async function CustomersPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">Customers</h1>
-        <p className="mt-1 text-sm text-slate-500">Master list with current outstanding balance.</p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">Customers</h1>
+          <p className="mt-1 text-sm text-slate-500">Master list with current outstanding balance.</p>
+        </div>
+        {canEdit && (
+          <Link
+            href="/customers/new"
+            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          >
+            + Add customer
+          </Link>
+        )}
       </div>
+
+      {error && (
+        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
+      )}
 
       {rows.length === 0 ? (
         <EmptyState
           title="No customers yet"
-          hint="Customers will appear here once added or imported from QuickBooks."
+          hint={canEdit ? "Use “Add customer” to create the first one." : "Customers will appear here once added or imported from QuickBooks."}
         />
       ) : (
         <Card className="p-0">
@@ -53,8 +74,12 @@ export default async function CustomersPage() {
             </thead>
             <tbody>
               {rows.map((c) => (
-                <tr key={c.id} className="border-b border-slate-100 last:border-0">
-                  <td className="px-4 py-3 text-slate-900">{c.name}</td>
+                <tr key={c.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                  <td className="px-4 py-3">
+                    <Link href={`/customers/${c.id}`} className="font-medium text-slate-900 hover:underline">
+                      {c.name}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3"><EntityTag entityId={c.entity_id} /></td>
                   <td className="px-4 py-3 text-slate-500">{c.type}</td>
                   <td className="px-4 py-3 font-mono tabular-nums text-slate-500">{c.credit_days}</td>
