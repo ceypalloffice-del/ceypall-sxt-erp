@@ -215,7 +215,7 @@ export default async function PalletSpecPage({
       </section>
 
       {canEdit && (
-        <section>
+        <section id="spec" className="scroll-mt-24">
           <h2 className="text-sm font-semibold text-slate-700">Spec &amp; pricing</h2>
           <Card className="mt-3">
             <form action={updatePalletSpec} className="grid grid-cols-1 gap-4 sm:grid-cols-2">

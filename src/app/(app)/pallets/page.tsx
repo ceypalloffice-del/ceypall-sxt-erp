@@ -4,7 +4,7 @@ import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 import { computeCosting } from "@/lib/costing";
-import { createPalletSpec } from "@/app/actions/pallet-specs";
+import { createPalletSpec, deletePalletSpec } from "@/app/actions/pallet-specs";
 
 export default async function PalletsPage({
   searchParams,
@@ -60,6 +60,7 @@ export default async function PalletsPage({
                 <th className="px-4 py-3 text-right font-medium">Grand total</th>
                 <th className="px-4 py-3 text-right font-medium">Margin</th>
                 <th className="px-4 py-3 text-right font-medium">Final price</th>
+                {canEdit && <th className="px-4 py-3" />}
               </tr>
             </thead>
             <tbody>
@@ -86,6 +87,27 @@ export default async function PalletsPage({
                     <td className="px-4 py-3 text-right font-mono tabular-nums text-slate-900">
                       {formatLKR(finalPrice)}
                     </td>
+                    {canEdit && (
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/pallets/${spec.id}#spec`}
+                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                          >
+                            Edit
+                          </Link>
+                          <form action={deletePalletSpec}>
+                            <input type="hidden" name="id" value={spec.id} />
+                            <button
+                              type="submit"
+                              className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                            >
+                              Delete
+                            </button>
+                          </form>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 );
               })}
