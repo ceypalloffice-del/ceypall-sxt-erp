@@ -91,7 +91,7 @@ export async function deleteCustomer(formData: FormData) {
     const message = error.message.includes("violates foreign key")
       ? "This customer has invoices, jobs or quotes on record and can't be deleted. Keep them for history."
       : error.message;
-    redirect(`/customers/${id}?error=${encodeURIComponent(message)}`);
+    redirect(`/customers/${id}/edit?error=${encodeURIComponent(message)}`);
   }
 
   revalidatePath("/customers");

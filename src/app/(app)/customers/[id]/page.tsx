@@ -4,18 +4,51 @@ import { createClient } from "@/lib/supabase/server";
 import { canKeepBooks, getProfile } from "@/lib/session";
 import { Card, EntityTag } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
-import { CustomerForm, type CustomerDetails } from "@/components/CustomerForm";
-import { updateCustomer, deleteCustomer } from "@/app/actions/customers";
+import type { CustomerDetails } from "@/components/CustomerForm";
+
+function Field({ label, value, mono }: { label: string; value?: string | number | null; mono?: boolean }) {
+  return (
+    <div>
+      <dt className="text-xs text-slate-500">{label}</dt>
+      <dd className={`mt-0.5 whitespace-pre-line text-slate-900 ${mono ? "font-mono tabular-nums" : ""}`}>
+        {value != null && value !== "" ? value : "—"}
+      </dd>
+    </div>
+  );
+}
+
+function ContactCard({
+  title,
+  name,
+  phone,
+  email,
+}: {
+  title: string;
+  name?: string | null;
+  phone?: string | null;
+  email?: string | null;
+}) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-slate-700">{title}</p>
+      <dl className="mt-2 space-y-2">
+        <Field label="Name" value={name} />
+        <Field label="Phone" value={phone} mono />
+        <Field label="Email" value={email} />
+      </dl>
+    </div>
+  );
+}
 
 export default async function CustomerDetailPage({
   params,
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ error?: string; saved?: string }>;
+  searchParams: Promise<{ saved?: string }>;
 }) {
   const { id } = await params;
-  const { error, saved } = await searchParams;
+  const { saved } = await searchParams;
   const supabase = await createClient();
   const profile = await getProfile();
   const canEdit = canKeepBooks(profile);
@@ -38,12 +71,22 @@ export default async function CustomerDetailPage({
             <EntityTag entityId={c.entity_id} />
           </div>
         </div>
-        <Card>
-          <p className="text-xs text-slate-500">Outstanding balance</p>
-          <p className="mt-1 text-right font-mono text-lg font-semibold tabular-nums text-slate-900">
-            {formatLKR(Number(balance?.balance ?? 0))}
-          </p>
-        </Card>
+        <div className="flex items-center gap-3">
+          {canEdit && (
+            <Link
+              href={`/customers/${c.id}/edit`}
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+            >
+              Edit
+            </Link>
+          )}
+          <Card>
+            <p className="text-xs text-slate-500">Outstanding balance</p>
+            <p className="mt-1 text-right font-mono text-lg font-semibold tabular-nums text-slate-900">
+              {formatLKR(Number(balance?.balance ?? 0))}
+            </p>
+          </Card>
+        </div>
       </div>
 
       {saved && (
@@ -51,56 +94,39 @@ export default async function CustomerDetailPage({
           Customer details saved.
         </p>
       )}
-      {error && (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-          {error}
-        </p>
-      )}
 
-      {canEdit ? (
-        <>
-          <CustomerForm action={updateCustomer} customer={c} submitLabel="Save changes" />
+      <Card>
+        <h2 className="text-sm font-semibold text-slate-700">Company</h2>
+        <dl className="mt-3 grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-3 lg:grid-cols-5 text-sm">
+          <Field label="Type" value={c.type} />
+          <Field label="Credit terms" value={c.credit_days != null ? `${c.credit_days} days` : null} />
+          <Field label="VAT / TIN" value={c.vat_tin} mono />
+          <Field label="General phone" value={c.phone} mono />
+          <Field label="General email" value={c.email} />
+        </dl>
+      </Card>
 
-          <Card>
-            <h2 className="text-sm font-semibold text-slate-700">Remove customer</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              Only possible while the customer has no invoices, jobs or quotes on record.
-            </p>
-            <form action={deleteCustomer} className="mt-3">
-              <input type="hidden" name="id" value={c.id} />
-              <button
-                type="submit"
-                className="rounded-md border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
-              >
-                Delete customer
-              </button>
-            </form>
-          </Card>
-        </>
-      ) : (
+      <Card>
+        <h2 className="text-sm font-semibold text-slate-700">Addresses</h2>
+        <dl className="mt-3 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2 text-sm">
+          <Field label="Head office" value={c.address} />
+          <Field label="Delivery address" value={c.delivery_address ?? "Same as head office"} />
+        </dl>
+      </Card>
+
+      <Card>
+        <h2 className="text-sm font-semibold text-slate-700">Contact people</h2>
+        <div className="mt-3 grid grid-cols-1 gap-6 text-sm sm:grid-cols-3">
+          <ContactCard title="Accounts" name={c.accounts_contact} phone={c.accounts_phone} email={c.accounts_email} />
+          <ContactCard title="Operations" name={c.operations_contact} phone={c.operations_phone} email={c.operations_email} />
+          <ContactCard title="Procurement" name={c.procurement_contact} phone={c.procurement_phone} email={c.procurement_email} />
+        </div>
+      </Card>
+
+      {c.notes && (
         <Card>
-          <dl className="grid grid-cols-1 gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              ["Type", c.type],
-              ["Credit terms", c.credit_days != null ? `${c.credit_days} days` : null],
-              ["VAT / TIN", c.vat_tin],
-              ["Phone", c.phone],
-              ["Email", c.email],
-              ["Head office", c.address],
-              ["Delivery address", c.delivery_address],
-              ["Accounts", [c.accounts_contact, c.accounts_phone, c.accounts_email].filter(Boolean).join(" · ")],
-              ["Operations", [c.operations_contact, c.operations_phone, c.operations_email].filter(Boolean).join(" · ")],
-              ["Procurement", [c.procurement_contact, c.procurement_phone, c.procurement_email].filter(Boolean).join(" · ")],
-              ["Notes", c.notes],
-            ]
-              .filter(([, value]) => value)
-              .map(([field, value]) => (
-                <div key={String(field)}>
-                  <dt className="text-xs text-slate-500">{field}</dt>
-                  <dd className="mt-0.5 text-slate-900">{value}</dd>
-                </div>
-              ))}
-          </dl>
+          <h2 className="text-sm font-semibold text-slate-700">Special notes</h2>
+          <p className="mt-3 whitespace-pre-line text-sm text-slate-900">{c.notes}</p>
         </Card>
       )}
     </div>
