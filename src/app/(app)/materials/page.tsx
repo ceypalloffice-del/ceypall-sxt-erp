@@ -3,6 +3,7 @@ import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState } from "@/components/ui";
 import { MaterialsTable } from "@/components/MaterialsTable";
 import { AddPlankForm } from "@/components/AddPlankForm";
+import { AddBlockForm } from "@/components/AddBlockForm";
 import { createCostItem } from "@/app/actions/cost-items";
 
 const CATEGORIES = ["timber", "nail", "chemical", "labour", "transport", "other"];
@@ -64,6 +65,18 @@ export default async function MaterialsPage({
           </p>
           <div className="mt-3">
             <AddPlankForm />
+          </div>
+        </Card>
+      )}
+
+      {canEdit && (
+        <Card>
+          <h2 className="text-sm font-semibold text-slate-700">Add block</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Pick the species and dimensions — the item name is built automatically.
+          </p>
+          <div className="mt-3">
+            <AddBlockForm />
           </div>
         </Card>
       )}

@@ -8,11 +8,11 @@ const WIDTHS = ['3"', '4"', '5"', '6"'];
 const LENGTHS = ["3'", "4'", "5'", "6'"];
 const THICKNESSES = ['5/8"', '3/4"', '7/8"', '1"'];
 
-const input =
+export const input =
   "w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400";
-const label = "block text-xs font-medium text-slate-500";
+export const label = "block text-xs font-medium text-slate-500";
 
-function SelectWithOther({
+export function SelectWithOther({
   title,
   name,
   customName,

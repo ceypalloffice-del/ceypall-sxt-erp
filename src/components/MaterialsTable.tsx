@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
-import { updateCostItemPrice, setCostItemActive } from "@/app/actions/cost-items";
+import { updateCostItem, updateCostItemPrice, setCostItemActive, deleteCostItem } from "@/app/actions/cost-items";
 
 type CostItem = {
   id: string;
@@ -34,6 +34,7 @@ export function MaterialsTable({ items, canEdit }: { items: CostItem[]; canEdit:
   const [activeTab, setActiveTab] = useState<Group>(
     GROUPS.find((g) => (grouped.get(g)?.length ?? 0) > 0) ?? "Planks"
   );
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const rows = grouped.get(activeTab) ?? [];
 
@@ -71,54 +72,136 @@ export function MaterialsTable({ items, canEdit }: { items: CostItem[]; canEdit:
                 <th className="px-4 py-3 font-medium">Unit</th>
                 <th className="px-4 py-3 text-right font-medium">Unit price</th>
                 {canEdit && <th className="px-4 py-3 font-medium">Active</th>}
+                {canEdit && <th className="px-4 py-3" />}
               </tr>
             </thead>
             <tbody>
-              {rows.map((item) => (
-                <tr key={item.id} className="border-b border-slate-100 last:border-0">
-                  <td className="px-4 py-3 text-slate-900">{item.name}</td>
-                  <td className="px-4 py-3 capitalize text-slate-500">{item.category}</td>
-                  <td className="px-4 py-3 text-slate-500">{item.unit ?? "—"}</td>
-                  <td className="px-4 py-3 text-right">
-                    {canEdit ? (
-                      <form action={updateCostItemPrice} className="flex justify-end gap-2">
-                        <input type="hidden" name="id" value={item.id} />
+              {rows.map((item) => {
+                const isEditing = canEdit && editingId === item.id;
+                const formId = `edit-${item.id}`;
+                return (
+                  <tr key={item.id} className="border-b border-slate-100 last:border-0">
+                    <td className="px-4 py-3 text-slate-900">
+                      {isEditing ? (
+                        <input
+                          name="name"
+                          form={formId}
+                          defaultValue={item.name}
+                          required
+                          className="w-full rounded-md border border-slate-300 px-2 py-1 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                        />
+                      ) : (
+                        item.name
+                      )}
+                    </td>
+                    <td className="px-4 py-3 capitalize text-slate-500">{item.category}</td>
+                    <td className="px-4 py-3 text-slate-500">
+                      {isEditing ? (
+                        <input
+                          name="unit"
+                          form={formId}
+                          defaultValue={item.unit ?? ""}
+                          placeholder="e.g. pc"
+                          className="w-20 rounded-md border border-slate-300 px-2 py-1 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                        />
+                      ) : (
+                        item.unit ?? "—"
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {isEditing ? (
                         <input
                           name="unit_price"
+                          form={formId}
                           type="number"
                           step="0.01"
                           defaultValue={item.unit_price}
                           className="w-24 rounded-md border border-slate-300 px-2 py-1 text-right font-mono text-sm tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                         />
-                        <button
-                          type="submit"
-                          className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                        >
-                          Save
-                        </button>
-                      </form>
-                    ) : (
-                      <span className="font-mono tabular-nums text-slate-900">{formatLKR(item.unit_price)}</span>
-                    )}
-                  </td>
-                  {canEdit && (
-                    <td className="px-4 py-3">
-                      <form action={setCostItemActive}>
-                        <input type="hidden" name="id" value={item.id} />
-                        <input type="hidden" name="active" value={item.active ? "false" : "true"} />
-                        <button
-                          type="submit"
-                          className={`rounded-full px-2.5 py-0.5 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
-                            item.active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          {item.active ? "Active" : "Inactive"}
-                        </button>
-                      </form>
+                      ) : canEdit ? (
+                        <form action={updateCostItemPrice} className="flex justify-end gap-2">
+                          <input type="hidden" name="id" value={item.id} />
+                          <input
+                            name="unit_price"
+                            type="number"
+                            step="0.01"
+                            defaultValue={item.unit_price}
+                            className="w-24 rounded-md border border-slate-300 px-2 py-1 text-right font-mono text-sm tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                          />
+                          <button
+                            type="submit"
+                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                          >
+                            Save
+                          </button>
+                        </form>
+                      ) : (
+                        <span className="font-mono tabular-nums text-slate-900">{formatLKR(item.unit_price)}</span>
+                      )}
                     </td>
-                  )}
-                </tr>
-              ))}
+                    {canEdit && (
+                      <td className="px-4 py-3">
+                        <form action={setCostItemActive}>
+                          <input type="hidden" name="id" value={item.id} />
+                          <input type="hidden" name="active" value={item.active ? "false" : "true"} />
+                          <button
+                            type="submit"
+                            className={`rounded-full px-2.5 py-0.5 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
+                              item.active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            {item.active ? "Active" : "Inactive"}
+                          </button>
+                        </form>
+                      </td>
+                    )}
+                    {canEdit && (
+                      <td className="px-4 py-3 text-right">
+                        {isEditing ? (
+                          <div className="flex items-center justify-end gap-1">
+                            <form id={formId} action={updateCostItem}>
+                              <input type="hidden" name="id" value={item.id} />
+                            </form>
+                            <button
+                              type="submit"
+                              form={formId}
+                              className="rounded-md px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                            >
+                              Save
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditingId(null)}
+                              className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              type="button"
+                              onClick={() => setEditingId(item.id)}
+                              className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                            >
+                              Edit
+                            </button>
+                            <form action={deleteCostItem}>
+                              <input type="hidden" name="id" value={item.id} />
+                              <button
+                                type="submit"
+                                className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                              >
+                                Delete
+                              </button>
+                            </form>
+                          </div>
+                        )}
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </Card>

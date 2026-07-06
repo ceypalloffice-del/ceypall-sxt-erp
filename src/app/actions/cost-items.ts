@@ -70,6 +70,85 @@ export async function createCostItem(formData: FormData) {
   revalidatePath("/materials");
 }
 
+export async function createBlockItem(formData: FormData) {
+  const species = pick(formData, "wood_species", "custom_species");
+  const dimensions = pick(formData, "block_dimensions", "custom_dimensions");
+  const basis = String(formData.get("price_basis") ?? "");
+  const price = Number(formData.get("unit_price"));
+
+  const fail: (message: string) => never = (message) =>
+    redirect(`/materials?error=${encodeURIComponent(message)}`);
+
+  if (!species) fail("Pick a wood species (or type the custom name).");
+  if (!dimensions) fail("Pick the block dimensions (or type the custom dimensions).");
+  if (!["ft", "beam"].includes(basis)) fail("Pick a price basis: per ft or per beam.");
+  if (!Number.isFinite(price) || price <= 0) fail("Enter the buying price.");
+
+  const name = `${species} block ${dimensions} — per ${basis}`;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("cost_items").insert({
+    entity_id: ENTITY,
+    category: "timber",
+    name,
+    unit: basis,
+    unit_price: price,
+    wood_species: species,
+    block_dimensions: dimensions,
+  });
+
+  if (error) {
+    fail(
+      error.message.includes("duplicate")
+        ? `"${name}" is already in the price book — edit its price in the list instead.`
+        : error.message
+    );
+  }
+
+  revalidatePath("/materials");
+  redirect(`/materials?added=${encodeURIComponent(name)}`);
+}
+
+export async function updateCostItem(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const unit = String(formData.get("unit") ?? "").trim();
+  const price = Number(formData.get("unit_price"));
+  if (!id || !name) return;
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("cost_items")
+    .update({ name, unit: unit || null, unit_price: Number.isFinite(price) ? price : 0 })
+    .eq("id", id);
+
+  if (error) {
+    const message = error.message.includes("duplicate")
+      ? `Another item is already named "${name}".`
+      : error.message;
+    redirect(`/materials?error=${encodeURIComponent(message)}`);
+  }
+
+  revalidatePath("/materials");
+}
+
+export async function deleteCostItem(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("cost_items").delete().eq("id", id);
+
+  if (error) {
+    const message = error.message.includes("violates foreign key")
+      ? "This material is used in pallet costings and can't be deleted — mark it Inactive instead."
+      : error.message;
+    redirect(`/materials?error=${encodeURIComponent(message)}`);
+  }
+
+  revalidatePath("/materials");
+}
+
 export async function updateCostItemPrice(formData: FormData) {
   const supabase = await createClient();
   const id = String(formData.get("id"));
