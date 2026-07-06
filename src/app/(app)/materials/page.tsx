@@ -2,11 +2,17 @@ import { createClient } from "@/lib/supabase/server";
 import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState } from "@/components/ui";
 import { MaterialsTable } from "@/components/MaterialsTable";
+import { AddPlankForm } from "@/components/AddPlankForm";
 import { createCostItem } from "@/app/actions/cost-items";
 
 const CATEGORIES = ["timber", "nail", "chemical", "labour", "transport", "other"];
 
-export default async function MaterialsPage() {
+export default async function MaterialsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; added?: string }>;
+}) {
+  const { error, added } = await searchParams;
   const supabase = await createClient();
   const profile = await getProfile();
   const canEdit = canKeepBooks(profile);
@@ -39,11 +45,32 @@ export default async function MaterialsPage() {
         </p>
       </div>
 
+      {added && (
+        <p className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          ✓ Added <span className="font-medium">{added}</span> to the price book.
+        </p>
+      )}
+      {error && (
+        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
+      )}
+
       <MaterialsTable items={rows} canEdit={canEdit} />
 
       {canEdit && (
         <Card>
-          <h2 className="text-sm font-semibold text-slate-700">Add material</h2>
+          <h2 className="text-sm font-semibold text-slate-700">Add plank</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Pick the species and dimensions — the item name is built automatically.
+          </p>
+          <div className="mt-3">
+            <AddPlankForm />
+          </div>
+        </Card>
+      )}
+
+      {canEdit && (
+        <Card>
+          <h2 className="text-sm font-semibold text-slate-700">Add other material</h2>
           <form action={createCostItem} className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-4">
             <input
               name="name"

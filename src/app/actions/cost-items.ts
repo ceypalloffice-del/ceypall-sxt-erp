@@ -1,9 +1,62 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 const ENTITY = "CPL";
+
+/** Reads a select with an optional "Other → custom text" companion field. */
+function pick(formData: FormData, selectName: string, customName: string) {
+  const selected = String(formData.get(selectName) ?? "").trim();
+  if (selected !== "Other") return selected;
+  return String(formData.get(customName) ?? "").trim();
+}
+
+export async function createPlankItem(formData: FormData) {
+  const species = pick(formData, "wood_species", "custom_species");
+  const width = pick(formData, "plank_width", "custom_width");
+  const length = pick(formData, "plank_length", "custom_length");
+  const thickness = String(formData.get("plank_thickness") ?? "").trim();
+  const basis = String(formData.get("price_basis") ?? "");
+  const price = Number(formData.get("unit_price"));
+
+  const fail: (message: string) => never = (message) =>
+    redirect(`/materials?error=${encodeURIComponent(message)}`);
+
+  if (!species) fail("Pick a wood species (or type the custom name).");
+  if (!width) fail("Pick a plank width (or type the custom width).");
+  if (!length) fail("Pick a length (or type the custom length).");
+  if (!thickness) fail("Pick a thickness.");
+  if (!["ft", "plank"].includes(basis)) fail("Pick a price basis: per ft or per plank.");
+  if (!Number.isFinite(price) || price <= 0) fail("Enter the buying price.");
+
+  const name = `${species} plank ${width} x ${thickness} x ${length} — per ${basis}`;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("cost_items").insert({
+    entity_id: ENTITY,
+    category: "timber",
+    name,
+    unit: basis,
+    unit_price: price,
+    wood_species: species,
+    plank_width: width,
+    plank_length: length,
+    plank_thickness: thickness,
+  });
+
+  if (error) {
+    fail(
+      error.message.includes("duplicate")
+        ? `"${name}" is already in the price book — edit its price in the list instead.`
+        : error.message
+    );
+  }
+
+  revalidatePath("/materials");
+  redirect(`/materials?added=${encodeURIComponent(name)}`);
+}
 
 export async function createCostItem(formData: FormData) {
   const supabase = await createClient();
