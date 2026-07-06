@@ -7,6 +7,7 @@ import { SubmitButton } from "@/components/SubmitButton";
 type InventoryItem = { id: string; name: string; unit: string | null; last_purchase_price: number | null; category: string };
 type ChemProduct   = { id: string; name: string; unit: string };
 type Supplier      = { id: string; name: string };
+type Material      = { id: string; name: string; unit: string | null; unit_price: number };
 
 const inputCls = "w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400";
 const labelCls = "block text-xs font-medium text-slate-600 mb-1";
@@ -17,10 +18,12 @@ export function NewPoForm({
   suppliers,
   inventoryItems,
   chemicals,
+  materialGroups = {},
 }: {
   suppliers: Supplier[];
   inventoryItems: InventoryItem[];
   chemicals: ChemProduct[];
+  materialGroups?: Record<string, Material[]>;
 }) {
   const today = new Date().toISOString().slice(0, 10);
   const [lines, setLines] = useState<LineItem[]>([{ _key: 0, description: "", inventory_item_id: null, chemical_product_id: null, unit: "pcs", qty_ordered: 1, unit_cost: null }]);
@@ -53,6 +56,10 @@ export function NewPoForm({
       const id   = value.slice(5);
       const chem = chemicals.find((c) => c.id === id);
       if (chem) updateLine(key, { chemical_product_id: id, inventory_item_id: null, description: chem.name, unit: chem.unit, unit_cost: null });
+    } else if (value.startsWith("mat:")) {
+      const id  = value.slice(4);
+      const mat = Object.values(materialGroups).flat().find((m) => m.id === id);
+      if (mat) updateLine(key, { inventory_item_id: null, chemical_product_id: null, description: mat.name, unit: mat.unit ?? "pcs", unit_cost: mat.unit_price || null });
     } else {
       updateLine(key, { inventory_item_id: null, chemical_product_id: null });
     }
@@ -122,6 +129,15 @@ export function NewPoForm({
                   defaultValue=""
                 >
                   <option value="">— other / free text —</option>
+                  {Object.entries(materialGroups).map(([group, mats]) =>
+                    mats.length > 0 ? (
+                      <optgroup key={group} label={group}>
+                        {mats.map((m) => (
+                          <option key={m.id} value={`mat:${m.id}`}>{m.name}</option>
+                        ))}
+                      </optgroup>
+                    ) : null
+                  )}
                   {inventoryItems.length > 0 && (
                     <optgroup label="Inventory Items">
                       {inventoryItems.map((i) => (
@@ -129,11 +145,13 @@ export function NewPoForm({
                       ))}
                     </optgroup>
                   )}
-                  <optgroup label="Chemicals">
-                    {chemicals.map((c) => (
-                      <option key={c.id} value={`chem:${c.id}`}>{c.name}</option>
-                    ))}
-                  </optgroup>
+                  {chemicals.length > 0 && (
+                    <optgroup label="Chemicals">
+                      {chemicals.map((c) => (
+                        <option key={c.id} value={`chem:${c.id}`}>{c.name}</option>
+                      ))}
+                    </optgroup>
+                  )}
                 </select>
               </div>
               {/* Description */}
