@@ -5,6 +5,7 @@ import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 import { computeCosting } from "@/lib/costing";
+import { SubmitButton } from "@/components/SubmitButton";
 import {
   updatePalletSpec,
   deletePalletSpec,
@@ -185,22 +186,20 @@ export default async function PalletSpecPage({
                     {canEdit && (
                       <td className="px-4 py-3 text-right">
                         <div className="flex justify-end gap-1">
-                          <button
-                            type="submit"
+                          <SubmitButton
+                            
                             form={`item-${item.id}`}
-                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                          >
+                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                             Save
-                          </button>
+                          </SubmitButton>
                           <form action={deletePalletSpecItem}>
                             <input type="hidden" name="id" value={item.id} />
                             <input type="hidden" name="spec_id" value={id} />
-                            <button
-                              type="submit"
-                              className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                            >
+                            <SubmitButton
+                              
+                              className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                               Remove
-                            </button>
+                            </SubmitButton>
                           </form>
                         </div>
                       </td>
@@ -318,23 +317,21 @@ export default async function PalletSpecPage({
               </Field>
 
               <div className="flex items-center gap-3 sm:col-span-2">
-                <button
-                  type="submit"
-                  className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                >
+                <SubmitButton
+                  
+                  className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                   Save spec
-                </button>
+                </SubmitButton>
               </div>
             </form>
 
             <form action={deletePalletSpec} className="mt-4 border-t border-slate-200 pt-4">
               <input type="hidden" name="id" value={id} />
-              <button
-                type="submit"
-                className="text-sm font-medium text-red-600 hover:text-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="text-sm font-medium text-red-600 hover:text-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Delete this spec
-              </button>
+              </SubmitButton>
             </form>
           </Card>
         </section>
@@ -369,12 +366,11 @@ export default async function PalletSpecPage({
                 placeholder="Qty"
                 className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Add
-              </button>
+              </SubmitButton>
             </form>
             <p className="mt-2 text-xs text-slate-400">
               Pick a material to use its current price, or leave it as a custom item and set unit price after adding.

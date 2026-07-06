@@ -4,6 +4,7 @@ import { canKeepBooks, getProfile } from "@/lib/session";
 import { Card, EmptyState, StatusBadge } from "@/components/ui";
 import { formatDate } from "@/lib/format";
 import { createBatch } from "@/app/actions/sxt-batches";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function BatchesPage() {
   const supabase = await createClient();
@@ -28,12 +29,11 @@ export default async function BatchesPage() {
         </div>
         {canEdit && (
           <form action={createBatch}>
-            <button
-              type="submit"
-              className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
               + New Batch
-            </button>
+            </SubmitButton>
           </form>
         )}
       </div>

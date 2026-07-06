@@ -7,6 +7,7 @@ import { formatLKR } from "@/lib/format";
 import { computeCosting } from "@/lib/costing";
 import { TreatmentQuoteForm } from "@/components/TreatmentQuoteForm";
 import { deleteTreatmentQuote } from "@/app/actions/treatment-quotes";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function TreatmentQuoteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -93,12 +94,11 @@ export default async function TreatmentQuoteDetailPage({ params }: { params: Pro
 
           <form action={deleteTreatmentQuote} className="mt-4 border-t border-slate-200 pt-4">
             <input type="hidden" name="id" value={id} />
-            <button
-              type="submit"
-              className="text-sm font-medium text-red-600 hover:text-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-            >
+            <SubmitButton
+              
+              className="text-sm font-medium text-red-600 hover:text-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
               Delete this quote
-            </button>
+            </SubmitButton>
           </form>
         </Card>
       )}

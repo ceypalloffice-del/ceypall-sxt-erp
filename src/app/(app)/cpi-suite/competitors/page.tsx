@@ -5,6 +5,7 @@ import { calcTreatmentCost } from "@/lib/cpi-engine/costing";
 import { calcBoardFeet, calcAutoRatePerBf } from "@/lib/cpi-engine/pricing";
 import { upsertCpiCompetitorPrice } from "@/app/actions/cpi-price-lists";
 import { canKeepBooks, getProfile } from "@/lib/session";
+import { SubmitButton } from "@/components/SubmitButton";
 
 function diffBadge(stx: number, comp: number) {
   const pct = ((comp - stx) / comp) * 100;
@@ -240,12 +241,11 @@ export default async function CpiCompetitorsPage({
                 className="mt-1 w-32 rounded-md border border-slate-300 px-3 py-2 text-sm font-mono tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
               />
             </div>
-            <button
-              type="submit"
-              className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800">
               Save
-            </button>
+            </SubmitButton>
           </form>
         </div>
       )}

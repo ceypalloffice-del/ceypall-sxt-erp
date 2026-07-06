@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signUp } from "@/app/actions/auth";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function SignupPage({
   searchParams,
@@ -56,12 +57,11 @@ export default async function SignupPage({
               className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
             />
           </div>
-          <button
-            type="submit"
-            className="w-full rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-          >
+          <SubmitButton
+            
+            className="w-full rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
             Sign up
-          </button>
+          </SubmitButton>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-500">

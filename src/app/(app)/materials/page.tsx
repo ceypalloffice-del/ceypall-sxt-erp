@@ -4,7 +4,9 @@ import { Card, EmptyState } from "@/components/ui";
 import { MaterialsTable } from "@/components/MaterialsTable";
 import { AddPlankForm } from "@/components/AddPlankForm";
 import { AddBlockForm } from "@/components/AddBlockForm";
+import { AddNailForm } from "@/components/AddNailForm";
 import { createCostItem } from "@/app/actions/cost-items";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const inputCls =
   "rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400";
@@ -25,12 +27,11 @@ function AddMaterialCard({ categories, title }: { categories: string[]; title: s
         </select>
         <input name="unit" placeholder="Unit (e.g. pc)" className={inputCls} />
         <input name="unit_price" type="number" step="0.01" placeholder="Unit price" className={inputCls} />
-        <button
-          type="submit"
-          className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-        >
+        <SubmitButton
+          
+          className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
           Add
-        </button>
+        </SubmitButton>
       </form>
     </Card>
   );
@@ -109,7 +110,17 @@ export default async function MaterialsPage({
               </div>
             </Card>
           ),
-          Nails: <AddMaterialCard title="Add nail" categories={["nail"]} />,
+          Nails: (
+            <Card>
+              <h2 className="text-sm font-semibold text-slate-700">Add nail</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Pick the type and size — the item name is built automatically.
+              </p>
+              <div className="mt-3">
+                <AddNailForm />
+              </div>
+            </Card>
+          ),
           Others: (
             <AddMaterialCard
               title="Add other material"

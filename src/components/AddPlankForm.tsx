@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPlankItem } from "@/app/actions/cost-items";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const SPECIES = ["Rubber", "Lunumidella", "Pine"];
 const WIDTHS = ['3"', '4"', '5"', '6"'];
@@ -104,12 +105,11 @@ export function AddPlankForm() {
         </div>
       </div>
       <div className="self-end">
-        <button
-          type="submit"
-          className="w-full rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-        >
+        <SubmitButton
+          
+          className="w-full rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
           Add plank
-        </button>
+        </SubmitButton>
       </div>
     </form>
   );

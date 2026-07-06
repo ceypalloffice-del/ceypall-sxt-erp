@@ -5,6 +5,7 @@ import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 import { computeCosting } from "@/lib/costing";
 import { createPalletSpec, deletePalletSpec } from "@/app/actions/pallet-specs";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function PalletsPage({
   searchParams,
@@ -98,12 +99,11 @@ export default async function PalletsPage({
                           </Link>
                           <form action={deletePalletSpec}>
                             <input type="hidden" name="id" value={spec.id} />
-                            <button
-                              type="submit"
-                              className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                            >
+                            <SubmitButton
+                              
+                              className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                               Delete
-                            </button>
+                            </SubmitButton>
                           </form>
                         </div>
                       </td>
@@ -127,12 +127,11 @@ export default async function PalletsPage({
               autoFocus={focusNew === "1"}
               className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
             />
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
               Create
-            </button>
+            </SubmitButton>
           </form>
         </Card>
       )}

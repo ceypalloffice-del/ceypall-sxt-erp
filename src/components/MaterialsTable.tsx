@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 import { updateCostItem, updateCostItemPrice, setCostItemActive, deleteCostItem } from "@/app/actions/cost-items";
+import { SubmitButton } from "@/components/SubmitButton";
 
 type CostItem = {
   id: string;
@@ -138,12 +139,11 @@ export function MaterialsTable({
                             defaultValue={item.unit_price}
                             className="w-24 rounded-md border border-slate-300 px-2 py-1 text-right font-mono text-sm tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                          >
+                          <SubmitButton
+                            
+                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                             Save
-                          </button>
+                          </SubmitButton>
                         </form>
                       ) : (
                         <span className="font-mono tabular-nums text-slate-900">{formatLKR(item.unit_price)}</span>
@@ -154,14 +154,13 @@ export function MaterialsTable({
                         <form action={setCostItemActive}>
                           <input type="hidden" name="id" value={item.id} />
                           <input type="hidden" name="active" value={item.active ? "false" : "true"} />
-                          <button
-                            type="submit"
+                          <SubmitButton
+                            
                             className={`rounded-full px-2.5 py-0.5 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
                               item.active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
-                            }`}
-                          >
+                            }`}>
                             {item.active ? "Active" : "Inactive"}
-                          </button>
+                          </SubmitButton>
                         </form>
                       </td>
                     )}
@@ -172,13 +171,12 @@ export function MaterialsTable({
                             <form id={formId} action={updateCostItem}>
                               <input type="hidden" name="id" value={item.id} />
                             </form>
-                            <button
-                              type="submit"
+                            <SubmitButton
+                              
                               form={formId}
-                              className="rounded-md px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                            >
+                              className="rounded-md px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                               Save
-                            </button>
+                            </SubmitButton>
                             <button
                               type="button"
                               onClick={() => setEditingId(null)}
@@ -198,12 +196,11 @@ export function MaterialsTable({
                             </button>
                             <form action={deleteCostItem}>
                               <input type="hidden" name="id" value={item.id} />
-                              <button
-                                type="submit"
-                                className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                              >
+                              <SubmitButton
+                                
+                                className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                                 Delete
-                              </button>
+                              </SubmitButton>
                             </form>
                           </div>
                         )}

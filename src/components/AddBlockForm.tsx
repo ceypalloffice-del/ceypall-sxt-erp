@@ -2,6 +2,7 @@
 
 import { createBlockItem } from "@/app/actions/cost-items";
 import { SelectWithOther, input, label } from "@/components/AddPlankForm";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const SPECIES = ["Rubber", "Lunumidella"];
 const DIMENSIONS = ['75mm x 100mm (3"x4")', '100mm x 100mm (4" x 4")'];
@@ -42,12 +43,11 @@ export function AddBlockForm() {
         </div>
       </div>
       <div className="self-end">
-        <button
-          type="submit"
-          className="w-full rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-        >
+        <SubmitButton
+          
+          className="w-full rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
           Add block
-        </button>
+        </SubmitButton>
       </div>
     </form>
   );

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { addChemicalPurchase, recordChemicalUsage, addStockAdjustment } from "@/app/actions/chemicals";
+import { SubmitButton } from "@/components/SubmitButton";
 
 type ChemProduct = {
   id: string;
@@ -204,13 +205,12 @@ export function ActionForms({ products }: { products: ChemProduct[] }) {
 
             {/* Submit */}
             <div className="flex items-end">
-              <button
-                type="submit"
+              <SubmitButton
+                
                 disabled={busy || !pPackSize || !pPacks}
-                className={btnCls + " w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"}
-              >
+                className={btnCls + " w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"}>
                 {busy ? "Saving…" : ok === "purchase" ? "✓ Saved" : "Add to Stock"}
-              </button>
+              </SubmitButton>
             </div>
           </form>
         )}
@@ -289,13 +289,12 @@ export function ActionForms({ products }: { products: ChemProduct[] }) {
 
             {/* Submit */}
             <div className="flex items-end">
-              <button
-                type="submit"
+              <SubmitButton
+                
                 disabled={busy || !uQty}
-                className={btnCls + " w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50"}
-              >
+                className={btnCls + " w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50"}>
                 {busy ? "Saving…" : ok === "usage" ? "✓ Saved" : "Record Usage"}
-              </button>
+              </SubmitButton>
             </div>
           </form>
         )}
@@ -381,13 +380,12 @@ export function ActionForms({ products }: { products: ChemProduct[] }) {
 
             {/* Submit */}
             <div className="flex items-end">
-              <button
-                type="submit"
+              <SubmitButton
+                
                 disabled={busy}
-                className={btnCls + " w-full bg-amber-500 hover:bg-amber-600 disabled:opacity-50"}
-              >
+                className={btnCls + " w-full bg-amber-500 hover:bg-amber-600 disabled:opacity-50"}>
                 {busy ? "Saving…" : ok === "adjust" ? "✓ Saved" : "Save Adjustment"}
-              </button>
+              </SubmitButton>
             </div>
           </form>
         )}

@@ -4,6 +4,7 @@ import { getProfile, isDirector } from "@/lib/session";
 import { Card, EmptyState } from "@/components/ui";
 import { createUserAccount, updateUserAccess } from "@/app/actions/users";
 import { ROLES } from "@/lib/access";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const ROLE_HINTS: Record<string, string> = {
   director: "Everything, including margins",
@@ -95,12 +96,11 @@ export default async function UsersAdminPage({
               <option value="SXT">St. Xavier only</option>
               <option value="CPL">CeyPall only</option>
             </select>
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
               Create
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </Card>
@@ -152,12 +152,11 @@ export default async function UsersAdminPage({
                           <option value="SXT">St. Xavier only</option>
                           <option value="CPL">CeyPall only</option>
                         </select>
-                        <button
-                          type="submit"
-                          className="rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                        >
+                        <SubmitButton
+                          
+                          className="rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                           Save
-                        </button>
+                        </SubmitButton>
                       </form>
                     </td>
                   </tr>

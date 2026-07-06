@@ -4,6 +4,7 @@ import { canKeepBooks, getProfile } from "@/lib/session";
 import { Card, EmptyState, EntityTag, StatusBadge } from "@/components/ui";
 import { formatLKR, formatDate } from "@/lib/format";
 import { recordMovement, updateInventoryItem } from "@/app/actions/inventory";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const CATEGORIES = [
   "raw_timber",
@@ -136,12 +137,11 @@ export default async function InventoryItemPage({ params }: { params: Promise<{ 
               Notes
               <input name="notes" className={inputCls} />
             </label>
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3">
               Record movement
-            </button>
+            </SubmitButton>
           </form>
           <p className="mt-2 text-xs text-slate-400">
             Direction only applies to Adjustment; all other types are fixed in/out automatically.
@@ -259,12 +259,11 @@ export default async function InventoryItemPage({ params }: { params: Promise<{ 
                 <textarea name="description" defaultValue={item.description ?? ""} rows={2} className={inputCls} />
               </label>
               <div className="sm:col-span-2">
-                <button
-                  type="submit"
-                  className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                >
+                <SubmitButton
+                  
+                  className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                   Save item
-                </button>
+                </SubmitButton>
               </div>
             </form>
           </Card>

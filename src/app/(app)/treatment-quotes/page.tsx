@@ -5,6 +5,7 @@ import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 import { computeCosting } from "@/lib/costing";
 import { createTreatmentQuote } from "@/app/actions/treatment-quotes";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const SERVICE_LABEL: Record<string, string> = {
   kiln_drying: "Kiln Drying",
@@ -100,12 +101,11 @@ export default async function TreatmentQuotesPage() {
               required
               className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
             />
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
               Create
-            </button>
+            </SubmitButton>
           </form>
         </Card>
       )}

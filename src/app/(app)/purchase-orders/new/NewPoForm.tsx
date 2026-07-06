@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPurchaseOrder, type PoItemInput } from "@/app/actions/purchase-orders";
+import { SubmitButton } from "@/components/SubmitButton";
 
 type InventoryItem = { id: string; name: string; unit: string | null; last_purchase_price: number | null; category: string };
 type ChemProduct   = { id: string; name: string; unit: string };
@@ -218,13 +219,13 @@ export function NewPoForm({
 
       {/* Submit */}
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
+        <SubmitButton
+          
           disabled={busy || lines.every((l) => !l.description)}
           className="rounded-lg bg-slate-800 px-6 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-50"
         >
           {busy ? "Creating…" : "Create Purchase Order"}
-        </button>
+        </SubmitButton>
         <a href="/purchase-orders" className="text-sm text-slate-500 hover:text-slate-800">
           Cancel
         </a>

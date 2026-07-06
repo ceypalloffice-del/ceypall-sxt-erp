@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const input =
   "w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400";
@@ -150,12 +151,11 @@ export function CustomerForm({
         />
       </Card>
 
-      <button
-        type="submit"
-        className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-      >
+      <SubmitButton
+        
+        className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
         {submitLabel}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

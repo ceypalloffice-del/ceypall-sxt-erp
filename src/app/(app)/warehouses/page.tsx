@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState, EntityTag } from "@/components/ui";
 import { createWarehouse } from "@/app/actions/warehouses";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function WarehousesPage() {
   const supabase = await createClient();
@@ -71,12 +72,11 @@ export default async function WarehousesPage() {
                 placeholder="Location (optional)"
                 className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3">
                 Add
-              </button>
+              </SubmitButton>
             </form>
           )}
         </Card>

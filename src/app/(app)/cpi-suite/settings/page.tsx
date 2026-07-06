@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { parseCpiSettings } from "@/lib/cpi-engine/types";
 import { updateCpiSettings } from "@/app/actions/cpi-settings";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const inputCls =
   "mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-mono tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400";
@@ -46,12 +47,11 @@ export default async function CpiSettingsPage() {
   const s = parseCpiSettings(data ?? []);
 
   const submitBtn = (
-    <button
-      type="submit"
-      className="rounded-md bg-emerald-700 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-    >
+    <SubmitButton
+      
+      className="rounded-md bg-emerald-700 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400">
       Save settings
-    </button>
+    </SubmitButton>
   );
 
   return (
@@ -116,19 +116,18 @@ export default async function CpiSettingsPage() {
         <h2 className="text-sm font-semibold text-slate-700">Profit Target</h2>
         <div className="flex flex-wrap gap-3">
           {[20, 25, 30, 35, 40].map((pct) => (
-            <button
+            <SubmitButton
               key={pct}
-              type="submit"
+              
               name="target_margin_pct"
               value={pct}
               className={`rounded-lg border px-5 py-2 text-sm font-semibold transition-colors ${
                 s.target_margin_pct === pct
                   ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                   : "border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50"
-              }`}
-            >
+              }`}>
               {pct}%
-            </button>
+            </SubmitButton>
           ))}
           <div className="flex items-center gap-2">
             <input
@@ -141,12 +140,11 @@ export default async function CpiSettingsPage() {
               className="w-20 rounded-md border border-slate-300 px-3 py-2 text-sm font-mono tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
             />
             <span className="text-sm text-slate-500">% custom</span>
-            <button
-              type="submit"
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
+            <SubmitButton
+              
+              className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
               Set
-            </button>
+            </SubmitButton>
           </div>
         </div>
       </form>
@@ -167,22 +165,21 @@ export default async function CpiSettingsPage() {
               desc: "Stored per-size overrides take precedence",
             },
           ].map(({ v, label, desc }) => (
-            <button
+            <SubmitButton
               key={v}
-              type="submit"
+              
               name="pricing_mode"
               value={v}
               className={`rounded-lg border px-5 py-3 text-left text-sm transition-colors ${
                 s.pricing_mode === v
                   ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                   : "border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50"
-              }`}
-            >
+              }`}>
               <p className="font-semibold">{label}</p>
               <p className="mt-0.5 text-xs font-normal text-slate-500">
                 {desc}
               </p>
-            </button>
+            </SubmitButton>
           ))}
         </div>
       </form>

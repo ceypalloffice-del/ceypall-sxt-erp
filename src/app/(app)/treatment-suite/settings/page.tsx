@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { canKeepBooks, getProfile } from "@/lib/session";
 import { Card } from "@/components/ui";
 import { updateSxtSettings } from "@/app/actions/sxt-settings";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const FIELD_GROUPS = [
   {
@@ -88,12 +89,11 @@ export default async function TreatmentSettingsPage() {
         ))}
 
         {canEdit && (
-          <button
-            type="submit"
-            className="rounded-md bg-slate-900 px-6 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-          >
+          <SubmitButton
+            
+            className="rounded-md bg-slate-900 px-6 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
             Save settings
-          </button>
+          </SubmitButton>
         )}
       </form>
     </div>

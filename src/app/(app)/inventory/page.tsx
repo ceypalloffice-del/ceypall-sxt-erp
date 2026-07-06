@@ -4,6 +4,7 @@ import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState, EntityTag, StatusBadge } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
 import { createInventoryItem } from "@/app/actions/inventory";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const CATEGORIES = [
   "raw_timber",
@@ -189,12 +190,11 @@ export default async function InventoryPage() {
                 </option>
               ))}
             </select>
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3">
               Add item
-            </button>
+            </SubmitButton>
           </form>
           )}
         </Card>

@@ -6,6 +6,7 @@ import { calcBoardFeet, calcAutoRatePerBf } from "@/lib/cpi-engine/pricing";
 import { updateCpiPriceRow } from "@/app/actions/cpi-price-lists";
 import { canKeepBooks, getProfile } from "@/lib/session";
 import { PrintButton } from "./PrintButton";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const inputCls =
   "w-24 rounded border border-slate-200 px-2 py-1 text-right text-xs font-mono tabular-nums focus:outline-none focus-visible:ring-1 focus-visible:ring-emerald-400";
@@ -156,12 +157,11 @@ function PriceTable({
                             </div>
                           ))}
                         </div>
-                        <button
-                          type="submit"
-                          className="mt-3 w-full rounded-md bg-emerald-700 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800"
-                        >
+                        <SubmitButton
+                          
+                          className="mt-3 w-full rounded-md bg-emerald-700 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800">
                           Save
-                        </button>
+                        </SubmitButton>
                         <p className="mt-2 text-[10px] text-slate-400">
                           Leave blank to use auto-calculated price
                         </p>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, EmptyState } from "@/components/ui";
 import { formatLKR } from "@/lib/format";
+import { SubmitButton } from "@/components/SubmitButton";
 import {
   createPlankRate,
   updatePlankRate,
@@ -97,12 +98,11 @@ export function TreatmentRatesView({
                             defaultValue={r.rate_per_sqft}
                             className="w-24 rounded-md border border-slate-300 px-2 py-1 text-right font-mono text-sm tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                          >
+                          <SubmitButton
+                            
+                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                             Save
-                          </button>
+                          </SubmitButton>
                         </form>
                       ) : (
                         <span className="font-mono tabular-nums text-slate-900">{formatLKR(r.rate_per_sqft)}</span>
@@ -113,14 +113,13 @@ export function TreatmentRatesView({
                         <form action={setPlankRateActive}>
                           <input type="hidden" name="id" value={r.id} />
                           <input type="hidden" name="active" value={r.active ? "false" : "true"} />
-                          <button
-                            type="submit"
+                          <SubmitButton
+                            
                             className={`rounded-full px-2.5 py-0.5 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
                               r.active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
-                            }`}
-                          >
+                            }`}>
                             {r.active ? "Active" : "Inactive"}
-                          </button>
+                          </SubmitButton>
                         </form>
                       </td>
                     )}
@@ -148,12 +147,11 @@ export function TreatmentRatesView({
                 placeholder="Rate per sqft"
                 className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Add plank rate
-              </button>
+              </SubmitButton>
             </form>
           </Card>
         )}
@@ -192,12 +190,11 @@ export function TreatmentRatesView({
                             defaultValue={r.rate_per_lft}
                             className="w-24 rounded-md border border-slate-300 px-2 py-1 text-right font-mono text-sm tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                           />
-                          <button
-                            type="submit"
-                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                          >
+                          <SubmitButton
+                            
+                            className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                             Save
-                          </button>
+                          </SubmitButton>
                         </form>
                       ) : (
                         <span className="font-mono tabular-nums text-slate-900">{formatLKR(r.rate_per_lft)}</span>
@@ -208,14 +205,13 @@ export function TreatmentRatesView({
                         <form action={setBeamRateActive}>
                           <input type="hidden" name="id" value={r.id} />
                           <input type="hidden" name="active" value={r.active ? "false" : "true"} />
-                          <button
-                            type="submit"
+                          <SubmitButton
+                            
                             className={`rounded-full px-2.5 py-0.5 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
                               r.active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"
-                            }`}
-                          >
+                            }`}>
                             {r.active ? "Active" : "Inactive"}
-                          </button>
+                          </SubmitButton>
                         </form>
                       </td>
                     )}
@@ -249,12 +245,11 @@ export function TreatmentRatesView({
                 placeholder="Rate per LFT"
                 className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Add beam rate
-              </button>
+              </SubmitButton>
             </form>
           </Card>
         )}

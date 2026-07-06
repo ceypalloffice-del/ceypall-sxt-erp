@@ -5,6 +5,7 @@ import { canKeepBooks, getProfile } from "@/lib/session";
 import { Card, EntityTag } from "@/components/ui";
 import { CustomerForm, type CustomerDetails } from "@/components/CustomerForm";
 import { updateCustomer, deleteCustomer } from "@/app/actions/customers";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function EditCustomerPage({
   params,
@@ -48,12 +49,11 @@ export default async function EditCustomerPage({
         </p>
         <form action={deleteCustomer} className="mt-3">
           <input type="hidden" name="id" value={c.id} />
-          <button
-            type="submit"
-            className="rounded-md border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
-          >
+          <SubmitButton
+            
+            className="rounded-md border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400">
             Delete customer
-          </button>
+          </SubmitButton>
         </form>
       </Card>
     </div>

@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatLKR } from "@/lib/format";
 import { updatePoStatus } from "@/app/actions/purchase-orders";
 import { ReceiveForm } from "./ReceiveForm";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const STATUS_STYLE: Record<string, string> = {
   draft:     "bg-slate-100 text-slate-600",
@@ -87,9 +88,9 @@ export default async function PurchaseOrderDetailPage({
               <form key={action.next} action={updatePoStatus}>
                 <input type="hidden" name="po_id"   value={id} />
                 <input type="hidden" name="status"  value={action.next} />
-                <button type="submit" className={`rounded-lg px-4 py-2 text-sm font-semibold ${action.cls}`}>
+                <SubmitButton  className={`rounded-lg px-4 py-2 text-sm font-semibold ${action.cls}`}>
                   {action.label}
-                </button>
+                </SubmitButton>
               </form>
             ))}
           </div>

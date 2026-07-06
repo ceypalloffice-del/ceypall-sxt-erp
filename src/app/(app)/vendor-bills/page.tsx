@@ -3,6 +3,7 @@ import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState, EntityTag, StatusBadge, AgeingDot } from "@/components/ui";
 import { formatLKR, formatDate } from "@/lib/format";
 import { createVendorBill, recordBillPayment } from "@/app/actions/vendor-bills";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const CATEGORIES = ["material", "utility", "licence", "tax", "maintenance", "transport", "other"];
 
@@ -156,12 +157,11 @@ export default async function VendorBillsPage() {
                       <option value="cash">Cash</option>
                       <option value="petty_cash">Petty cash</option>
                     </select>
-                    <button
-                      type="submit"
-                      className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                    >
+                    <SubmitButton
+                      
+                      className="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                       Record payment
-                    </button>
+                    </SubmitButton>
                   </form>
                 )}
               </Card>
@@ -237,12 +237,11 @@ export default async function VendorBillsPage() {
                 className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
             </label>
-            <button
-              type="submit"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3"
-            >
+            <SubmitButton
+              
+              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 sm:col-span-3">
               Add bill
-            </button>
+            </SubmitButton>
           </form>
         </Card>
       )}

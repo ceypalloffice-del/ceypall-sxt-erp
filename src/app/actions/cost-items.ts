@@ -109,6 +109,48 @@ export async function createBlockItem(formData: FormData) {
   redirect(`/materials?added=${encodeURIComponent(name)}`);
 }
 
+export async function createNailItem(formData: FormData) {
+  const nailType = pick(formData, "nail_type", "custom_type");
+  const size = pick(formData, "nail_size", "custom_size");
+  const gauge = pick(formData, "nail_gauge", "custom_gauge");
+  const basis = String(formData.get("price_basis") ?? "");
+  const price = Number(formData.get("unit_price"));
+
+  const fail: (message: string) => never = (message) =>
+    redirect(`/materials?error=${encodeURIComponent(message)}`);
+
+  if (!nailType) fail("Pick a nail type (or type the custom name).");
+  if (!size) fail("Pick a nail size (or type the custom size).");
+  if (!gauge) fail("Pick a gauge (or type the custom gauge).");
+  if (!["kg", "nail"].includes(basis)) fail("Pick a price basis: per kg or per nail.");
+  if (!Number.isFinite(price) || price <= 0) fail("Enter the buying price.");
+
+  const name = `${nailType} ${size}" G${gauge} — per ${basis}`;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("cost_items").insert({
+    entity_id: ENTITY,
+    category: "nail",
+    name,
+    unit: basis,
+    unit_price: price,
+    nail_type: nailType,
+    nail_size: size,
+    nail_gauge: gauge,
+  });
+
+  if (error) {
+    fail(
+      error.message.includes("duplicate")
+        ? `"${name}" is already in the price book — edit its price in the list instead.`
+        : error.message
+    );
+  }
+
+  revalidatePath("/materials");
+  redirect(`/materials?added=${encodeURIComponent(name)}`);
+}
+
 export async function updateCostItem(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   const name = String(formData.get("name") ?? "").trim();

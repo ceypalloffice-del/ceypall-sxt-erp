@@ -11,6 +11,7 @@ import {
   formatDuration,
   toColombDatetimeLocal,
 } from "@/lib/sxt-engine/cost";
+import { SubmitButton } from "@/components/SubmitButton";
 import {
   addBatchItem,
   removeBatchItem,
@@ -244,12 +245,11 @@ export default async function BatchDetailPage({
 
           {canEdit && (
             <div className="sm:col-span-2">
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Save times
-              </button>
+              </SubmitButton>
               <span className="ml-3 text-xs text-slate-400">
                 Times are in Sri Lanka time (UTC+5:30).
               </span>
@@ -636,12 +636,11 @@ export default async function BatchDetailPage({
             </div>
 
             <div className="sm:col-span-4">
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-5 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-5 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Add to batch
-              </button>
+              </SubmitButton>
             </div>
           </form>
         </Card>

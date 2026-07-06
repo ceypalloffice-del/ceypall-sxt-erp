@@ -4,6 +4,7 @@ import { getProfile, getActiveEntity } from "@/lib/session";
 import { EntitySwitcher } from "@/components/EntitySwitcher";
 import { Nav } from "@/components/Nav";
 import { signOut } from "@/app/actions/auth";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -30,12 +31,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <span className="text-slate-400">· {profile?.role ?? "viewer"}</span>
             </span>
             <form action={signOut}>
-              <button
-                type="submit"
-                className="text-sm font-medium text-slate-500 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="text-sm font-medium text-slate-500 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Sign out
-              </button>
+              </SubmitButton>
             </form>
           </div>
         </div>

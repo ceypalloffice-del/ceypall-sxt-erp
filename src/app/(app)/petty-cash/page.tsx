@@ -3,6 +3,7 @@ import { canKeepBooks, getProfile, getActiveEntity } from "@/lib/session";
 import { Card, EmptyState, EntityTag } from "@/components/ui";
 import { formatLKR, formatDate } from "@/lib/format";
 import { addPettyCashTopUp, addPettyCashExpense } from "@/app/actions/petty-cash";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const EXPENSE_CATEGORIES = [
   "fuel",
@@ -132,12 +133,11 @@ export default async function PettyCashPage() {
                 placeholder="Note (optional)"
                 className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Add top-up
-              </button>
+              </SubmitButton>
             </form>
           </Card>
 
@@ -168,12 +168,11 @@ export default async function PettyCashPage() {
                 placeholder="Note (optional)"
                 className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-              >
+              <SubmitButton
+                
+                className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
                 Add expense
-              </button>
+              </SubmitButton>
             </form>
           </Card>
         </div>

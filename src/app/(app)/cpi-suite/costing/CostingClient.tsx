@@ -5,6 +5,7 @@ import { calcTreatmentChemistry } from "@/lib/cpi-engine/chemistry";
 import { calcTreatmentCost } from "@/lib/cpi-engine/costing";
 import type { CpiSettings } from "@/lib/cpi-engine/types";
 import { createCpiLog } from "@/app/actions/cpi-logs";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const inputCls =
   "mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-mono tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400";
@@ -298,12 +299,11 @@ export function CostingClient({ settings }: { settings: CpiSettings }) {
                 className={inputCls}
               />
             </div>
-            <button
-              type="submit"
-              className="w-full rounded-md bg-emerald-700 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-            >
+            <SubmitButton
+              
+              className="w-full rounded-md bg-emerald-700 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400">
               {saved ? "✓ Saved!" : "Save Treatment Log"}
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </div>
