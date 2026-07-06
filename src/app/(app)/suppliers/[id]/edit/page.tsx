@@ -45,11 +45,31 @@ export default async function EditSupplierPage({
       <Card>
         <form action={updateSupplier} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <input type="hidden" name="id" value={supplier.id} />
-          <div className="sm:col-span-2">
+          <div>
             <label className={labelCls} htmlFor="name">Vendor name *</label>
             <input id="name" name="name" required defaultValue={supplier.name} className={inputCls} />
           </div>
-          <div className="sm:col-span-2">
+          <div>
+            <label className={labelCls} htmlFor="company_name">Company name</label>
+            <input
+              id="company_name"
+              name="company_name"
+              defaultValue={supplier.company_name ?? ""}
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label className={labelCls} htmlFor="credit_days">Credit terms (days)</label>
+            <input
+              id="credit_days"
+              name="credit_days"
+              type="number"
+              min={0}
+              defaultValue={supplier.credit_days ?? 30}
+              className={`${inputCls} font-mono tabular-nums`}
+            />
+          </div>
+          <div>
             <label className={labelCls} htmlFor="category">Supply category (what they supply)</label>
             <input
               id="category"

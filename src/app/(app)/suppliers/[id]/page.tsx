@@ -73,7 +73,13 @@ export default async function SupplierDetailPage({
       <Card>
         <h2 className="text-sm font-semibold text-slate-700">Vendor details</h2>
         <dl className="mt-3 grid grid-cols-2 gap-x-8 gap-y-4 text-sm sm:grid-cols-3 lg:grid-cols-4">
+          <Field label="Company name" value={supplier.company_name} />
           <Field label="Supplies" value={supplier.category} />
+          <Field
+            label="Credit terms"
+            value={supplier.credit_days != null ? `${supplier.credit_days} days` : null}
+            mono
+          />
           <Field label="Phone" value={supplier.phone} mono />
           <Field label="Email" value={supplier.email} />
           <Field label="Address" value={supplier.address} />

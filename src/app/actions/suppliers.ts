@@ -7,11 +7,14 @@ import { canKeepBooks, getProfile } from "@/lib/session";
 
 function readDetails(formData: FormData) {
   const text = (key: string) => String(formData.get(key) ?? "").trim() || null;
+  const creditDays = Number(formData.get("credit_days"));
   return {
+    company_name: text("company_name"),
     category: text("category"),
     phone: text("phone"),
     email: text("email"),
     address: text("address"),
+    credit_days: Number.isFinite(creditDays) && creditDays >= 0 ? creditDays : 30,
   };
 }
 

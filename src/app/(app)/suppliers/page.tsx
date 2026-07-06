@@ -94,6 +94,14 @@ export default async function SuppliersPage({
               <option value="CPL">CPL</option>
             </select>
             <input name="name" placeholder="Vendor name" required className={`${inputCls} lg:col-span-2`} />
+            <input name="company_name" placeholder="Company name" className={`${inputCls} lg:col-span-2`} />
+            <input
+              name="credit_days"
+              type="number"
+              min={0}
+              placeholder="Credit terms (days)"
+              className={`${inputCls} font-mono tabular-nums`}
+            />
             <input
               name="category"
               placeholder="Supply category (what they supply, e.g. timber, nails, fuel)"
