@@ -90,9 +90,9 @@ export async function updatePoStatus(formData: FormData) {
 }
 
 /** Record a GRN — receives goods and auto-updates inventory/chemical stock via DB trigger. */
-export async function createGrn(formData: FormData) {
+export async function createGrn(formData: FormData): Promise<{ error?: string }> {
   const profile = await getProfile();
-  if (!canKeepBooks(profile)) return;
+  if (!canKeepBooks(profile)) return { error: "Your role can't receive goods." };
 
   const supabase   = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -104,7 +104,7 @@ export async function createGrn(formData: FormData) {
   const lines: GrnLine[] = JSON.parse(String(formData.get("lines") || "[]"))
     .filter((l: GrnLine) => l.qty_received > 0);
 
-  if (lines.length === 0) return;
+  if (lines.length === 0) return { error: "Enter the quantity received for at least one item." };
 
   const { data: grn, error } = await supabase
     .from("purchase_grns")
@@ -118,10 +118,10 @@ export async function createGrn(formData: FormData) {
     .select("id")
     .single();
 
-  if (error || !grn) return;
+  if (error || !grn) return { error: error?.message ?? "Could not create the goods received note." };
 
   // Insert GRN items — trigger handles stock movements + PO status update
-  await supabase.from("purchase_grn_items").insert(
+  const { error: itemsError } = await supabase.from("purchase_grn_items").insert(
     lines.map((l) => ({
       grn_id:       grn.id,
       po_item_id:   l.po_item_id,
@@ -129,8 +129,15 @@ export async function createGrn(formData: FormData) {
     }))
   );
 
+  if (itemsError) {
+    // Don't leave an empty GRN behind if the lines failed
+    await supabase.from("purchase_grns").delete().eq("id", grn.id);
+    return { error: itemsError.message };
+  }
+
   revalidatePath(`/purchase-orders/${poId}`);
   revalidatePath("/purchase-orders");
   revalidatePath("/chemicals");
   revalidatePath("/inventory");
+  return {};
 }

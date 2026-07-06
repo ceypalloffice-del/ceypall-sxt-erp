@@ -19,10 +19,12 @@ export function ReceiveForm({ poId, items }: { poId: string; items: PoItem[] }) 
   const [qtys, setQtys]   = useState<Record<string, string>>({});
   const [busy, setBusy]   = useState(false);
   const [done, setDone]   = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (outstanding.length === 0) return null;
 
   async function handleSubmit(fd: FormData) {
+    setError(null);
     const lines = outstanding
       .map((item) => ({
         po_item_id:   item.id,
@@ -30,13 +32,20 @@ export function ReceiveForm({ poId, items }: { poId: string; items: PoItem[] }) 
       }))
       .filter((l) => l.qty_received > 0);
 
-    if (lines.length === 0) return;
+    if (lines.length === 0) {
+      setError("Type the quantity received in the box next to each item first.");
+      return;
+    }
     setBusy(true);
     fd.set("po_id",  poId);
     fd.set("lines", JSON.stringify(lines));
-    await createGrn(fd);
-    setQtys({});
+    const result = await createGrn(fd);
     setBusy(false);
+    if (result?.error) {
+      setError(result.error);
+      return;
+    }
+    setQtys({});
     setDone(true);
     setTimeout(() => setDone(false), 3000);
   }
@@ -82,6 +91,10 @@ export function ReceiveForm({ poId, items }: { poId: string; items: PoItem[] }) 
         })}
       </div>
 
+      {error && (
+        <p className="border-t border-red-100 bg-red-50 px-6 py-3 text-sm text-red-700">{error}</p>
+      )}
+
       <div className="flex items-center gap-4 border-t border-slate-200 px-6 py-4">
         <div className="flex-1 grid grid-cols-2 gap-4 max-w-sm">
           <div>
@@ -96,8 +109,7 @@ export function ReceiveForm({ poId, items }: { poId: string; items: PoItem[] }) 
           </div>
         </div>
         <SubmitButton
-          
-          disabled={busy || Object.values(qtys).every((v) => !v || Number(v) === 0)}
+          disabled={busy}
           className="rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
         >
           {busy ? "Saving…" : done ? "✓ Stock Updated" : "Confirm Receipt"}
