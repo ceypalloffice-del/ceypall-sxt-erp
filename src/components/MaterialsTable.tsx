@@ -15,7 +15,8 @@ type CostItem = {
 };
 
 const GROUPS = ["Planks", "Blocks", "Nails", "Others"] as const;
-type Group = (typeof GROUPS)[number];
+export type MaterialGroup = (typeof GROUPS)[number];
+type Group = MaterialGroup;
 
 function groupFor(item: CostItem): Group {
   if (item.category === "nail") return "Nails";
@@ -24,7 +25,16 @@ function groupFor(item: CostItem): Group {
   return "Others";
 }
 
-export function MaterialsTable({ items, canEdit }: { items: CostItem[]; canEdit: boolean }) {
+export function MaterialsTable({
+  items,
+  canEdit,
+  addForms,
+}: {
+  items: CostItem[];
+  canEdit: boolean;
+  /** Per-tab add form, rendered below the table for the active tab only. */
+  addForms?: Partial<Record<Group, React.ReactNode>>;
+}) {
   const grouped = useMemo(() => {
     const map = new Map<Group, CostItem[]>(GROUPS.map((g) => [g, []]));
     for (const item of items) map.get(groupFor(item))!.push(item);
@@ -206,6 +216,8 @@ export function MaterialsTable({ items, canEdit }: { items: CostItem[]; canEdit:
           </table>
         </Card>
       )}
+
+      {canEdit && addForms?.[activeTab]}
     </div>
   );
 }
