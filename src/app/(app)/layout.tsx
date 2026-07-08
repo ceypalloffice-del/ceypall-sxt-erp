@@ -1,17 +1,20 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
 import { getProfile, getActiveEntity } from "@/lib/session";
+import { canAccess } from "@/lib/access";
 import { EntitySwitcher } from "@/components/EntitySwitcher";
 import { Nav } from "@/components/Nav";
 import { signOut } from "@/app/actions/auth";
 import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
   const profile = await getProfile();
+  if (!profile) redirect("/login");
+
+  // Role-based section guard (pathname forwarded by the middleware)
+  const pathname = (await headers()).get("x-pathname") ?? "/";
+  if (!canAccess(profile.role, pathname)) redirect("/");
+
   const activeEntity = await getActiveEntity(profile);
 
   return (
